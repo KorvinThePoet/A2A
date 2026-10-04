@@ -4,7 +4,7 @@
 
 Request::Request(const std::string& str) : method(0), route(""), host(""), content_type(""),
                                             content_length(0), bad_request(false){
-    std::string met, rou, hst, tp, len;
+    std::string met, rou, hst, tp, len, bd;
     int i = 0;
     for (; str[i] != ' '; ++i){
         met += str[i];
@@ -42,7 +42,7 @@ Request::Request(const std::string& str) : method(0), route(""), host(""), conte
         return;
     }
     i += 14;
-    for (; str[i] != '\n'; ++i){
+    for (; str[i] != '\n' && i < str.size(); ++i){
         tp += str[i];
     }
     ++i;
@@ -55,5 +55,17 @@ Request::Request(const std::string& str) : method(0), route(""), host(""), conte
     for (; str[i] != '\n' && i < str.size(); ++i){
         len += str[i];
     }
-    
+    content_length = string_to_size_t(len);
+    if(content_length == 0) {
+        bad_request = true;
+        return;
+    }
+    i += 2;
+    for (; i < str.size(); ++i){
+        bd += str[i];
+    }
+    route = rou;
+    host = hst;
+    content_type = tp;
+    body = bd;
 }
