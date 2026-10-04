@@ -1,7 +1,11 @@
 #include <string>
 
 class Request{
-    std::string method;
+    // 0 - POST
+    // 1 - GET
+    // 2 - PUT
+    // 3 - DELETE
+    size_t method;
     std::string route;
     std::string host;
     std::string content_type;
