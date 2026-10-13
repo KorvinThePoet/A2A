@@ -1,3 +1,6 @@
+#pragma once
+
+#include "exceptions/net_exceptions.hpp"
 #include <string>
 #include <vector>
 
@@ -10,7 +13,6 @@ private:
 public:
     // Как реализовать автоинкремент
     Chat();
-    void exclude(size_t user_id);
-    void change_admin(size_t new_admin_id);
-
+    void exclude(size_t user_id); // исключает пользователя из группы
+    void change_admin(size_t new_admin_id); // изменяет права пользователя
 };
