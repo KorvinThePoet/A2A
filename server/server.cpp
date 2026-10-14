@@ -103,10 +103,10 @@ private:
                             std::cout << "Received from fd " << client_fd 
                                      << ": " << buffer << std::endl;
                             
-                            // Эхо-ответ (можно заменить на свою логику)
-                            std::string response = "You just said:\n - ";
+                            std::string response = "You just said:\n";
                             response += buffer;
-                            response += "\nNigga stop texting me, i got a boyfriend, niga jus stop!";
+                            response += "\nI got you ma boy, chill out, the things you said ruthless, so chillout monica";
+                            
                             send(client_fd, response.c_str(), response.length(), 0);
                         }
                     }

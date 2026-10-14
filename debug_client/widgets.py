@@ -63,7 +63,7 @@ class RouteInfo(QWidget):
 
     def send(self):
         payload: dict = {}
-        payload["route"] = self.route
+        
         for field_name, widget in self.inputs.items():
             if isinstance(widget, QSpinBox):
                 payload[field_name] = widget.value()
@@ -127,13 +127,21 @@ class MainWindow(QMainWindow):
 
 
     def handle_route(self, route_id):
+        self.response_widget.response.setText("Send request to get response")
         self.stacked_widget.setCurrentIndex(route_id)
 
     def handle_send(self, payload: dict):
         if self.socket.isOpen():
-            print("Sending msg")
-            self.socket.write(str(payload).encode())
-            print("MSG sent")
+            current_route = routes[self.stacked_widget.currentIndex()]
+            request = ( f"{current_route.method.value} {current_route.path}\n"
+                        f"Host: localhost\n"
+                        f"Content-Type: json\n"
+                        f"Content-Length: {len(str(payload))}\n\n"
+                        f"{str(payload)}"
+            )
+            self.socket.write(request.encode())
+            print("Sending:")
+            print(str(request))
 
     def set_response(self, response: str):
         self.response_widget.response.setText(response)
