@@ -3,3 +3,7 @@
 
 User: 
     last_online: datetime для каждого клиента
+
+Использовать для работы с бд
+#include <sqlite_orm/sqlite_orm.h> - орм, не нужно писать сырые запросы, думаю наилучший вариант
+#include <SQLiteCpp/SQLiteCpp.h> - Пишем сырые запросы, хз хз
