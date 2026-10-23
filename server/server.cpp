@@ -11,6 +11,10 @@
 #include <thread>
 #include <atomic>
 #include <mutex>
+#include "requests/parser.hpp"
+#include "requests/requests.hpp"
+#include "requests/router.hpp"
+
 
 class Server {
 private:
@@ -100,14 +104,16 @@ private:
                             clients_to_remove.push_back(client_fd);
                         } else {
                             buffer[bytes_read] = '\0';
-                            std::cout << "Received from fd " << client_fd 
-                                     << ": " << buffer << std::endl;
+                            // std::cout << "Received from fd " << client_fd 
+                            //          << ": " << buffer << std::endl;
                             
-                            std::string response = "You just said:\n";
-                            response += buffer;
-                            response += "\nI got you ma boy, chill out, the things you said ruthless, so chillout monica";
-                            
-                            send(client_fd, response.c_str(), response.length(), 0);
+                            // std::string response = "You just said:\n";
+                            // response += buffer;
+                            // response += "\nI got you ma boy, chill out, the things you said ruthless, so chillout monica";
+                            Request req(buffer);
+                            Response resp = route(req);
+                            std::string raw_shi = resp.to_string();
+                            send(client_fd, raw_shi.c_str(), raw_shi.length(), 0);
                         }
                     }
                 }

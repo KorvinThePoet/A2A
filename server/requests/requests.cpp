@@ -1,6 +1,8 @@
+#include <map>
 #include <iostream>
-#include "request.hpp"
-#include "strtools.hpp"
+
+#include "requests.hpp"
+#include "../tools/strtools.hpp"
 
 Request::Request(const std::string& str) : method(0), route(""), host(""), content_type(""),
                                             content_length(0), bad_request(false){
@@ -68,4 +70,27 @@ Request::Request(const std::string& str) : method(0), route(""), host(""), conte
     host = hst;
     content_type = tp;
     body = bd;
+}
+
+std::string Request::to_what_mama_rodila(){
+        std::string res = "";
+        if( method == 1 ) {
+            res = "POST";
+        }
+        if( method == 0 ) {
+            res = "GET";
+        }
+        if( method == 2 ) {
+            res = "DELETE";
+        }
+        if( method == 3 ) {
+            res = "PUT";
+        }
+
+        res += " " + route;
+        res += "\nHost: " + host;
+        res += "\nContent-Type: " + content_type;
+        res += "\nContent-Length: " + std::to_string(content_length);
+        res += "\n\n" + body;
+        return res;
 }
