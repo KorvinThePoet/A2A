@@ -2,24 +2,26 @@
 #pragma once
 #include <sqlite_orm/sqlite_orm.h>
 #include <string>
+#include <optional>
 
 struct User{
     int id;
-    int age;
+    std::optional<int>  age;
 
     std::string username;
-    std::string full_name;
+    std::optional<std::string> full_name;
     std::string hashed_password;
     std::string pfp_path;
     std::time_t last_online;
 
+    User() : pfp_path("/static/default/balbes.jpg") {}
 };
 
 inline auto makeUserTable() {
     using namespace sqlite_orm;
     return make_table("users",
             make_column("id", &User::id, primary_key().autoincrement()),
-            make_column("username", &User::username),
+            make_column("username", &User::username, unique()),
             make_column("full_name", &User::full_name),
             make_column("hashed_password", &User::hashed_password),
             make_column("age", &User::age),
