@@ -11,9 +11,10 @@
 #include <thread>
 #include <atomic>
 #include <mutex>
-#include "requests/parser.hpp"
 #include "requests/requests.hpp"
 #include "requests/router.hpp"
+#include "db/storage.hpp"
+#include "users/router.hpp"
 
 
 class Server {
@@ -24,6 +25,9 @@ private:
     std::thread listen_thread;
     std::vector<int> clients;
     std::mutex clients_mutex;
+    Storage storage;
+    Requests::RouterManager router_manager;
+
     
     void listenLoop() {
         fd_set readfds;
@@ -104,14 +108,11 @@ private:
                             clients_to_remove.push_back(client_fd);
                         } else {
                             buffer[bytes_read] = '\0';
-                            // std::cout << "Received from fd " << client_fd 
-                            //          << ": " << buffer << std::endl;
-                            
-                            // std::string response = "You just said:\n";
-                            // response += buffer;
-                            // response += "\nI got you ma boy, chill out, the things you said ruthless, so chillout monica";
+                            std::cout << "GOT BUFFER\n";
+                            std::cout << buffer << '\n';
                             Request req(buffer);
-                            Response resp = route(req);
+                            Response resp = router_manager.route(req, storage);
+                            
                             std::string raw_shi = resp.to_string();
                             send(client_fd, raw_shi.c_str(), raw_shi.length(), 0);
                         }
@@ -129,7 +130,9 @@ private:
     }
     
 public:
-    Server(int p) : server_fd(-1), port(p), running(false) {}
+    Server(int p, Requests::RouterManager mng) : server_fd(-1), port(p), running(false), storage(makeStorage()), router_manager(mng) {
+        storage.sync_schema();
+    }
     
     ~Server() {
         stop();
@@ -205,10 +208,14 @@ public:
             std::cout << "Server stopped" << std::endl;
         }
     }
+
 };
 
 int main() {
-    Server server(8080);
+    Requests::RouterManager mng;
+    mng.register_router("/users/", Users::route);
+
+    Server server(8080, mng);
     
     if (!server.start()) {
         std::cerr << "Failed to start server" << std::endl;

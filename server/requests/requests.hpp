@@ -1,3 +1,5 @@
+#pragma once
+
 #include <string>
 
 class Request{
@@ -17,7 +19,13 @@ class Request{
 public:
     Request(const std::string&);
 
+    std::string get_route() const;
+    std::string get_host() const;
+    std::string get_content_type() const;
+    std::string get_body() const;
+    size_t get_content_length() const;
+    bool is_bad_request() const;
+    std::string get_method() const;
+
     std::string to_what_mama_rodila();
 };
-
-

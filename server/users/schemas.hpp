@@ -3,7 +3,6 @@
 #include <sqlite_orm/sqlite_orm.h>
 #include <string>
 #include <optional>
-
 struct User{
     int id;
     std::optional<int>  age;

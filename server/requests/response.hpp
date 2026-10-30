@@ -1,5 +1,8 @@
+#pragma once
+
 #include <string>
 #include <map>
+#include <iostream>
 
 class Response{
     int status;
@@ -13,6 +16,6 @@ public:
             body(body)
     {}
 
-    
+
     std::string to_string();
 };

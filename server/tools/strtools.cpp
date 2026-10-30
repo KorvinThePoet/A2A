@@ -56,3 +56,95 @@ std::vector<std::string> garbage_split(const std::string& str, char sep) {
     return res;
 }
 
+
+std::vector<std::string> devide_in_two(const std::string& str, int start, char sep) {
+
+    std::string prefix;
+    std::string postfix;
+    int i = start;
+
+    for(;i < str.length(); ++i) {
+        if(str[i] == sep) {
+            ++i;
+            break;
+        }
+        prefix += str[i];
+    }
+    for(; i <str.length(); ++i) {
+        postfix += str[i];
+    }
+
+    return {prefix, postfix};
+}
+
+bool starts_with(const std::string& dep, const std::string& arr) {
+    int i = 0;
+    for(; i < dep.length() && i < arr.length(); ++i) {
+        if(dep[i] != arr[i]) {
+            return false;
+        }
+    }
+
+    if (i == dep.length() && i != arr.length()) {
+        return false;
+    }
+    return true;
+}
+
+std::map<std::string, std::string> to_map(const std::string& str) {
+    // TODO дырявое ведро хихи
+    // ALLOWED ONLY single quotion mark ("'")
+
+    std::map<std::string, std::string> result;
+    std::vector<std::string> pairs = split(str, ',');
+
+    for(std::string pair : pairs) {
+        std::string curr_key;
+        std::string curr_val;
+        int i = 0;
+        bool seen = false;
+        for(; i < pair.length(); ++i) {
+            if(pair[i] == '\'' && seen) {
+                ++i;
+                break;
+            }
+            if(seen) {
+                curr_key += pair[i];
+            }
+            if(pair[i] == '\'') {
+                seen = true;
+                continue;
+            }
+        }
+        
+        seen = false;
+        bool norm = false;
+        for(; i < pair.length(); ++i) {
+            if(pair[i] == ':') {
+                if(!norm)
+                    norm = true;
+                else{
+                    norm = false;
+                    break;
+                }
+            }
+            if(seen && pair[i] == '\'') {
+                break;
+            }
+            if(seen) {
+                curr_val += pair[i];
+            }
+            if(pair[i] == '\'') {
+                seen = true;
+            }
+        }
+
+        if(!norm) {
+            std::cout << "ERROR WHILE PARSING";
+            throw std::runtime_error("PARSE ERROR");
+        }
+
+        result[curr_key] = curr_val;
+    }
+    return result;
+}

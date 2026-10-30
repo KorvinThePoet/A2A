@@ -23,6 +23,7 @@ Request::Request(const std::string& str) : method(0), route(""), host(""), conte
         bad_request = true;
         return;
     }
+
     ++i;
     for (; str[i] != '\n' && i < str.size(); ++i){
         rou += str[i];
@@ -93,4 +94,39 @@ std::string Request::to_what_mama_rodila(){
         res += "\nContent-Length: " + std::to_string(content_length);
         res += "\n\n" + body;
         return res;
+}
+
+
+std::string Request::get_route() const {
+    return route;
+}
+std::string Request::get_host() const {
+    return host;
+}
+std::string Request::get_content_type() const {
+    return content_type;
+}
+std::string Request::get_body() const {
+    return body;
+}
+size_t Request::get_content_length() const {
+    return content_length;
+}
+bool Request::is_bad_request() const{
+    return bad_request;
+}
+std::string Request::get_method() const{
+    if (method == 1) {
+        return "GET";
+    }
+    if (method == 0) {
+        return "POST";
+    }
+    if (method == 2) {
+        return "PUT";
+    }
+    if (method == 3) {
+        return "DELETE";
+    }
+    return "HZHZHZHZ";
 }
