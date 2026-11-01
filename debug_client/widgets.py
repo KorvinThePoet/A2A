@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QSpinBox, QLineEdit, QHBoxLayout, QStackedWidget, QScrollArea
+from PyQt6.QtWidgets import QSizePolicy, QSpinBox, QLineEdit, QHBoxLayout, QStackedWidget, QScrollArea
 from PyQt6.QtCore import pyqtSignal, Qt
 from PyQt6.QtWidgets import QWidget, QMainWindow, QPushButton, QVBoxLayout, QLabel
 from PyQt6.QtNetwork import QTcpSocket, QAbstractSocket
@@ -46,7 +46,7 @@ class RouteInfo(QWidget):
             for field_name, type in self.route.fields.items():
                 input_widget = QLineEdit()
 
-                if type == "integer":
+                if type == "int":
                     input_widget = QSpinBox()
                 input_widget.resize(200, 100)
                 
@@ -70,13 +70,24 @@ class RouteInfo(QWidget):
             if isinstance(widget, QLineEdit):
                 payload[field_name] = widget.text()
         self.send_request.emit(payload)
+        payload.clear()
+
 
 class ServerResponse(QWidget):
     def __init__(self):
         super().__init__()
-        self.response = QLabel()
-        self.response.setText("No response yet")
+        self.response = QLabel("No response yet")
         self.response.setWordWrap(True)
+        self.response.setAlignment(Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignLeft)
+
+        scroll = QScrollArea()
+        scroll.setWidgetResizable(True)
+        scroll.setWidget(self.response)
+
+        layout = QHBoxLayout()
+        layout.addWidget(scroll)
+        self.setLayout(layout)
+
 
         layout = QHBoxLayout()
         layout.addWidget(self.response)
@@ -133,7 +144,16 @@ class MainWindow(QMainWindow):
     def handle_send(self, payload: dict):
         if self.socket.isOpen():
             current_route = routes[self.stacked_widget.currentIndex()]
-            request = ( f"{current_route.method.value} {current_route.path}\n"
+            current_endpoint = current_route.path
+            endpoint_parts = current_route.path.split('/')
+            for i in endpoint_parts:
+                if len(i) > 0 and i[0] == '{':
+                    name, type_ = i[1:len(i)-1].split(':')
+                    if name in payload.keys():
+                        current_endpoint = current_endpoint.replace(i, payload[name])
+                        payload.pop(name)
+
+            request = ( f"{current_route.method.value} {current_endpoint}\n"
                         f"Host: localhost\n"
                         f"Content-Type: json\n"
                         f"Content-Length: {len(str(payload))}\n\n"

@@ -26,6 +26,12 @@ struct UserResponse{
     std::string pfp_path;
 
     UserResponse(const User& u) : username(u.username), full_name(u.full_name.value_or("")), id(u.id), pfp_path(u.pfp_path) {}
+
+    std::string to_json() {
+        return "{'id':'" + std::to_string(id) + 
+                "','username':'" + username + "','full_name':'" + full_name + 
+                "','pfp_path':'" + pfp_path + "'}";
+    }
 };
 
 struct UpdateUserRequest{

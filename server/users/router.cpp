@@ -26,5 +26,8 @@ Response Users::route(const Request& req, Storage &storage) {
     if(starts_with(postfix, "get_user") && req.get_method() == "GET") {
         return uctrl.get_user(postfix);
     }
-    return Response(404, {}, "");
+    if(starts_with(postfix, "get_all") && req.get_method() == "GET") {
+        return uctrl.get_all_users();
+    }
+    return Response(404, {}, "'message': 'unknown route'");
 }

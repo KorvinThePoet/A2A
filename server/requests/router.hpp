@@ -9,8 +9,14 @@
 #include "../db/storage.hpp"
 #include "../tools/strtools.hpp"
 
-// используя parser, чтобы получить payload и превраитить его в один из  user/models.hpp 
-// чтобы потом использовать эту dto в users/controllers и тддтдддтдтд
+// Эхх, щас все стало чуточку проще. 17 00. 
+// Имеем RouterManager, его основная обязанность рекистрировать роуты у приложений
+// например у приложения users, 
+// Легкость в том, что мы делигируем парсинг запроса на само приложение
+// Все что делает RouterManager - просто сохраняет список функций route(const Request&, Storage&)
+//   и вызывает нужну, в зависимости от prefix в самом req.get_route()
+// а там уже server/users/router.cpp вызывает route и далее по кайфу выполняет задачку
+// и тдтдтдтдтдтд и тд(и так далее(и тд))
 
 using RouterFunk = std::function<Response(const Request&, Storage&)>;
 
@@ -35,7 +41,6 @@ public:
         std::string route = req.get_route();
 
         for(int i = 0; i < controllers.size(); ++i) {
-            std::cout << "IS IT " << controllers[i].prefix << "?\n";
             if(starts_with(route, controllers[i].prefix)) {
                 return controllers[i].controller(req, storage);
             }

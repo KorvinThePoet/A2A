@@ -25,9 +25,7 @@ Users::CreateUserRequest Users::UserController::parseCreateUserRequest(const std
 }
 
 Response Users::UserController::create_user(const std::string& body) {
-    std::cout << "+\n";
     std::optional<CreateUserRequest> cur_opt;
-    std::cout << "-\n";
     try {
         cur_opt.emplace(parseCreateUserRequest(body));
     } catch(const std::exception& e) {
@@ -37,21 +35,18 @@ Response Users::UserController::create_user(const std::string& body) {
         std::cerr << "parse failed: unknown exception\n";
         return Response(400, {}, "'error_message': 'bad body'");
     }
-    std::cout << "*\n";
     CreateUserRequest cur = *cur_opt;
     if(cur.password.size() < 5) {
         return Response(400, {}, "'error_message': 'Password is too short'");
     }
-    std::cout << "1\n";
     User new_user;
-    new_user.username = cur.username;
+    new_user.username = tolower(cur.username);
     new_user.full_name = cur.full_name;
     new_user.hashed_password = hash_pwd(cur.password);
     new_user.last_online = std::time(nullptr);
     if(cur.pfp_path.has_value()) {
         new_user.pfp_path = cur.pfp_path.value();
     }
-    std::cout << "2\n";
     
     try {
         storage.insert(new_user);
@@ -61,28 +56,35 @@ Response Users::UserController::create_user(const std::string& body) {
         // TODO add some checks to make sure it unique constraint
         return Response(404, {}, "'error_message': 'User already exists'");
     }
-    std::cout << "3\n";
-    return Response(200, {}, "'msg': 'success'");
+    return Response(200, {}, "'message': 'User created'");
 }
 
 Response Users::UserController::get_user(const std::string &route) {
 
-    // TODO make methods to return responses in json
-    // prbly for responseuser, e.g. Response(200, {}, UserResponse(user).to_json())
-    // type shi
-    // fff123r
-    std::string id_str = "";
+    std::string username = "";
     for(int i = route.find("get_user/") + std::string("get_user/").length(); i < route.length(); ++i) {
         if(route[i] == '/') break;
-        id_str += route[i];
+        username += route[i];
     }
-    size_t id = string_to_size_t(id_str);
-    try {
-        auto user = storage.get<User>(id);
-        return Response(200, {}, "");
-    } catch(const std::system_error& e) {
-        // Same shi like in create_user
-        return Response(404, {}, "");
+    username = tolower(username);
+    auto user = storage.get_all<User>(sqlite_orm::where(sqlite_orm::c(&User::username) == username));
+    if(user.empty()) {
+        return Response(404, {}, "{'message': 'user not found'}");
     }
-    return Response(404, {}, "");
+    return Response(200, {}, UserResponse(user[0]).to_json());
+
+}
+
+
+Response Users::UserController::get_all_users() {
+    auto users = storage.get_all<User>();
+    if(users.empty()) {
+        return Response(200, {}, "{}");
+    }
+    std::string response = "{'0':" + UserResponse(users[0]).to_json()+"";
+    for(int i = 1; i < users.size(); ++i) {
+        response += ",{'" + std::to_string(i) + "':" + UserResponse(users[i]).to_json();
+    }
+    response += "}";
+    return Response(200, {}, response);
 }

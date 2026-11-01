@@ -8,6 +8,14 @@ std::string toupper(const std::string& x){
     return res;
 }
 
+std::string tolower(const std::string& x){
+    std::string res;
+    for (int i = 0; i < x.size(); ++i){
+        res += std::tolower(x[i]);
+    }
+    return res;
+}
+
 size_t string_to_size_t(const std::string& x){
     size_t res = 0;
     for (int i = 0; i < x.size(); ++i){
