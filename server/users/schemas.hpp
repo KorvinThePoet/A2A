@@ -33,7 +33,8 @@ inline auto makeTokenTable() {
             make_column("id", &Token::id, primary_key().autoincrement()),
             make_column("user_id", &Token::user_id),
             make_column("hashed_token", &Token::hashed_token),
-            make_column("creation_time", &Token::deletion_time);
+            make_column("creation_time", &Token::creation_time),
+            make_column("deletion_time", &Token::deletion_time)
     );
 }
 
