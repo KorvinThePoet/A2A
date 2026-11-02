@@ -28,7 +28,7 @@ struct Token{
 inline auto makeTokenTable() {
     using namespace sqlite_orm;
     return make_table("tokens",
-            make_column("id", &User::id, primary_key().autoincrement()),
+            make_column("id", &Token::id, primary_key().autoincrement()),
             make_column("user_id", &Token::user_id),
             make_column("hashed_token", &Token::hashed_token),
             make_column("creation_time", &Token::deletion_time);
