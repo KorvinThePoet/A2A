@@ -5,8 +5,10 @@
 inline auto makeStorage() {
     using namespace sqlite_orm;
     return make_storage("temp.db",
-        makeUserTable()
+        makeUserTable(),
+        makeTokenTable()
     );
 }
+
 
 using Storage = decltype(makeStorage());
