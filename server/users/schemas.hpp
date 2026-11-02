@@ -18,6 +18,25 @@ struct User{
     User() : pfp_path("/static/default/balbes.jpg") {}
 };
 
+struct Token{
+    int id;
+    std::string hashed_token;
+    
+    int user_id;
+    std::time_t creation_time;
+    std::time_t deletion_time;
+};
+
+inline auto makeTokenTable() {
+    using namespace sqlite_orm;
+    return make_table("tokens",
+            make_column("id", &Token::id, primary_key().autoincrement()),
+            make_column("user_id", &Token::user_id),
+            make_column("hashed_token", &Token::hashed_token),
+            make_column("creation_time", &Token::deletion_time);
+    );
+}
+
 inline auto makeUserTable() {
     using namespace sqlite_orm;
     return make_table("users",
