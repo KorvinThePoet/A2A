@@ -5,9 +5,7 @@ std::string hash_pwd(const std::string& pwd) {
 }
 
 Users::CreateUserRequest Users::UserController::parseCreateUserRequest(const std::string& body) {
-    std::cout << "BODY\n";
     auto body_items = to_map(body);
-    std::cout << "DONE TO MAP\n";
     Users::CreateUserRequest cur{
         body_items["full_name"], body_items["username"],
         body_items["password"], body_items["pfp_path"]
