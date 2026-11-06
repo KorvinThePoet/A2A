@@ -156,3 +156,11 @@ std::map<std::string, std::string> to_map(const std::string& str) {
     }
     return result;
 }
+
+std::string hash_password(const std::string& password) {
+    return "damn_that_password's hashed:" + password;
+}
+
+std::string hash_token(const std::string& token) {
+    return "damn_that_token's hashed:" + token;
+}
