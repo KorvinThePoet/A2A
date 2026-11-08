@@ -12,3 +12,7 @@ std::vector<std::string> garbage_split(const std::string&, char);
 std::vector<std::string> devide_in_two(const std::string& str, int start, char sep);
 bool starts_with(const std::string& dep, const std::string& arr);
 std::map<std::string, std::string> to_map(const std::string&);
+
+// unsafe hzhz
+std::string hash_password(const std::string& password);
+std::string hash_token(const std::string& token);

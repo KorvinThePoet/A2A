@@ -1,18 +1,12 @@
 #include "controllers.hpp"
 
-std::string hash_pwd(const std::string& pwd) {
-    return "damn_that_password's hashed:" + pwd;
-}
-
 Users::CreateUserRequest Users::UserController::parseCreateUserRequest(const std::string& body) {
-    std::cout << "BODY\n";
     auto body_items = to_map(body);
-    std::cout << "DONE TO MAP\n";
     Users::CreateUserRequest cur{
-        body_items["full_name"], body_items["username"],
+        body_items["full_name"], body_items["username"], body_items["email"],
         body_items["password"], body_items["pfp_path"]
     };
-    std::cout << "DONE CUR\n";
+
     if(cur.username == "") {
         std::cout << "HOW DO U WANT TO CREATE USER WITHOUT USERNAME\n";
         throw std::runtime_error("username is not specified");
@@ -23,6 +17,22 @@ Users::CreateUserRequest Users::UserController::parseCreateUserRequest(const std
     }
     return cur;
 }
+
+Users::LoginUserRequest Users::UserController::parseLoginUserRequest(const std::string &body) {
+    auto body_items = to_map(body);
+    Users::LoginUserRequest lur{body_items["username"], body_items["password"]};
+    if(lur.username.empty()) {
+        std::cout << "HOW DO U WANT TO LOGIN USER WITHOUT USERNAME\n";
+        throw std::runtime_error("username is not specified");
+    }
+    if(lur.password.empty()) {
+        std::cout << "HOW DO U WANT TO LOGIN USER WITHOUT PASSWORD\n";
+        throw std::runtime_error("password is not specified");
+    }
+
+    return lur;
+}
+
 
 Response Users::UserController::create_user(const std::string& body) {
     std::optional<CreateUserRequest> cur_opt;
@@ -42,7 +52,8 @@ Response Users::UserController::create_user(const std::string& body) {
     User new_user;
     new_user.username = tolower(cur.username);
     new_user.full_name = cur.full_name;
-    new_user.hashed_password = hash_pwd(cur.password);
+    new_user.email = cur.email;
+    new_user.hashed_password = hash_password(cur.password);
     new_user.last_online = std::time(nullptr);
     if(cur.pfp_path.has_value()) {
         new_user.pfp_path = cur.pfp_path.value();
@@ -72,7 +83,39 @@ Response Users::UserController::get_user(const std::string &route) {
         return Response(404, {}, "{'message': 'user not found'}");
     }
     return Response(200, {}, UserResponse(user[0]).to_json());
+}
 
+
+Response Users::UserController::get_personal_info(const std::string &body) {
+    auto payload = to_map(body);
+    std::string str_user_id = payload["user_id"];
+    std::string str_token = payload["token"];
+    size_t user_id = string_to_size_t(str_user_id);
+    if(str_user_id.empty() || str_token.empty() || user_id == 0) {
+        return Response(400, {}, "{'message': 'user id or token is not specified'}");
+    }
+
+    auto tokens = storage.get_all<Token>(sqlite_orm::where(sqlite_orm::c(&Token::user_id) == user_id));
+    if(tokens.empty()) {
+        return Response(400, {}, "{'message': 'You have no access'}");
+    }
+    auto token = *tokens.begin();
+    
+    if(token.expires < std::time(nullptr)) {
+        return Response(400, {}, "{'message': 'your session is over, relogin'}");
+    }
+    if(hash_token(str_token) != token.hashed_token) {
+        return Response(400, {}, "'message': 'Access denied'");
+    }
+
+    try {
+        User user = storage.get<User>(token.user_id);
+        return Response(200, {}, DetailedUserResponse(user).to_json());
+    } catch(const std::runtime_error& e) {
+        return Response(404, {}, "'message': 'Cant find detials on dis user'");
+    } catch(...) {
+        return Response(400, {}, "");
+    }
 }
 
 
@@ -87,4 +130,30 @@ Response Users::UserController::get_all_users() {
     }
     response += "}";
     return Response(200, {}, response);
+}
+
+Response Users::UserController::login(const std::string& body) {
+    std::optional<LoginUserRequest> lur_opt;
+    try{
+        lur_opt = parseLoginUserRequest(body);
+    }catch(const std::runtime_error& e) {
+        return Response(400, {}, "'message': 'username or password are not specified'");
+    }
+
+    LoginUserRequest lur = *lur_opt;
+    auto users = storage.get_all<User>(sqlite_orm::where(sqlite_orm::c(&User::username)==lur.username));
+    if(users.empty()) {
+        return Response(400, {}, "'message': 'No such user'");
+    }
+    User user = *users.begin();
+    if(user.hashed_password == hash_password(lur.password)) {
+        storage.remove_all<Token>(sqlite_orm::where(sqlite_orm::c(&Token::user_id) == user.id));
+
+        // Добавить немного времени хранения, а то 20 секунд маловато для меня жиесь
+        std::string str_token = user.username + std::to_string(std::time(nullptr));
+        Token token {-1, hash_token(str_token), user.id, std::time(nullptr) + 20};
+        storage.insert<Token>(token);
+        return Response(200, {}, "'token':'" + str_token + "'}");
+    }
+    return Response(400, {}, "'message': 'password is invalid'");
 }
