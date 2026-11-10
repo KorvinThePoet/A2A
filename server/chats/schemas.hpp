@@ -1,4 +1,5 @@
 #pragma once
+
 #include <sqlite_orm/sqlite_orm.h>
 #include <string>
 #include <optional>
@@ -55,7 +56,6 @@ inline auto makeChatMemberTable(){
         make_column("user_id", &ChatMember::user_id),
         make_column("joined_at", &ChatMember::joined_at),
         make_column("last_online", &ChatMember::last_online),
-        // DONT SAVE HER ,SHE DON WANNA BE SAVED
         make_column("role", &ChatMember::role),
         primary_key(&ChatMember::chat_id, &ChatMember::user_id),
         foreign_key(&ChatMember::chat_id).references(&Chat::id).on_delete.cascade(),

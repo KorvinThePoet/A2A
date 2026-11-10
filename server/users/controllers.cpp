@@ -40,14 +40,14 @@ Response Users::UserController::create_user(const std::string& body) {
         cur_opt.emplace(parseCreateUserRequest(body));
     } catch(const std::exception& e) {
         std::cout << "parse failed: " << e.what() << "\n";
-        return Response(400, {}, "'error_message': 'bad body'");
+        return MessageResponse(400, "bad body");
     } catch(...) {
         std::cerr << "parse failed: unknown exception\n";
-        return Response(400, {}, "'error_message': 'bad body'");
+        return MessageResponse(400, "bad body");
     }
     CreateUserRequest cur = *cur_opt;
     if(cur.password.size() < 5) {
-        return Response(400, {}, "'error_message': 'Password is too short'");
+        return MessageResponse(400, "Short password");
     }
     User new_user;
     new_user.username = tolower(cur.username);
@@ -65,9 +65,9 @@ Response Users::UserController::create_user(const std::string& body) {
         // when storage coudnt insert due to the unique constraint failure, it throws 
         // std::system_error with message somm like "UNIQUE CONTSTRAINT"
         // TODO add some checks to make sure it unique constraint
-        return Response(404, {}, "'error_message': 'User already exists'");
+        return MessageResponse(401, "User already exists");
     }
-    return Response(200, {}, "'message': 'User created'");
+    return MessageResponse(200, "User created");
 }
 
 Response Users::UserController::get_user(const std::string &route) {
@@ -80,7 +80,7 @@ Response Users::UserController::get_user(const std::string &route) {
     username = tolower(username);
     auto user = storage.get_all<User>(sqlite_orm::where(sqlite_orm::c(&User::username) == username));
     if(user.empty()) {
-        return Response(404, {}, "{'message': 'user not found'}");
+        return MessageResponse(404, "User not found");
     }
     return Response(200, {}, UserResponse(user[0]).to_json());
 }
@@ -92,29 +92,29 @@ Response Users::UserController::get_personal_info(const std::string &body) {
     std::string str_token = payload["token"];
     size_t user_id = string_to_size_t(str_user_id);
     if(str_user_id.empty() || str_token.empty() || user_id == 0) {
-        return Response(400, {}, "{'message': 'user id or token is not specified'}");
+        return MessageResponse(400, "user id or token are not specified");
     }
 
     auto tokens = storage.get_all<Token>(sqlite_orm::where(sqlite_orm::c(&Token::user_id) == user_id));
     if(tokens.empty()) {
-        return Response(400, {}, "{'message': 'You have no access'}");
+        return MessageResponse(400, "You have no access");
     }
     auto token = *tokens.begin();
     
     if(token.expires < std::time(nullptr)) {
-        return Response(400, {}, "{'message': 'your session is over, relogin'}");
+        return MessageResponse(400, "your session is over, relogin");
     }
     if(hash_token(str_token) != token.hashed_token) {
-        return Response(400, {}, "'message': 'Access denied'");
+        return MessageResponse(400, "Access denied");
     }
 
     try {
         User user = storage.get<User>(token.user_id);
         return Response(200, {}, DetailedUserResponse(user).to_json());
     } catch(const std::runtime_error& e) {
-        return Response(404, {}, "'message': 'Cant find detials on dis user'");
+        return MessageResponse(404, "cant find dis vanila");
     } catch(...) {
-        return Response(400, {}, "");
+        return MessageResponse(400, "Unknow error wtf");
     }
 }
 
@@ -137,13 +137,13 @@ Response Users::UserController::login(const std::string& body) {
     try{
         lur_opt = parseLoginUserRequest(body);
     }catch(const std::runtime_error& e) {
-        return Response(400, {}, "'message': 'username or password are not specified'");
+        return MessageResponse(400, "username or password are not specified");
     }
 
     LoginUserRequest lur = *lur_opt;
     auto users = storage.get_all<User>(sqlite_orm::where(sqlite_orm::c(&User::username)==lur.username));
     if(users.empty()) {
-        return Response(400, {}, "'message': 'No such user'");
+        return MessageResponse(400, "No such user");
     }
     User user = *users.begin();
     if(user.hashed_password == hash_password(lur.password)) {
@@ -155,5 +155,5 @@ Response Users::UserController::login(const std::string& body) {
         storage.insert<Token>(token);
         return Response(200, {}, "'token':'" + str_token + "'}");
     }
-    return Response(400, {}, "'message': 'password is invalid'");
+    return MessageResponse(400, "password is invalid");
 }

@@ -9,7 +9,7 @@
 
 Response Users::route(const Request& req, Storage &storage) {
     std::string local_route = req.get_route();
-    std::vector<std::string> prf_n_psf = devide_in_two(local_route, 1, '/');
+    std::vector<std::string> prf_n_psf = divide_in_two(local_route, 1, '/');
 
     std::string prefix = prf_n_psf[0];
     std::string postfix = prf_n_psf[01];
@@ -17,7 +17,7 @@ Response Users::route(const Request& req, Storage &storage) {
     if (prefix != "users") {
         std::cout << "DEBUG\n";
         std::cout << prefix << "!=users\n";
-        return Response(404, {}, "");
+        return MessageResponse(404, "Wrong route method");
     }
     UserController uctrl(storage);
     if(starts_with(postfix, "create_user") && req.get_method() == "POST") {
@@ -35,5 +35,5 @@ Response Users::route(const Request& req, Storage &storage) {
     if(starts_with(postfix, "login") && req.get_method() == "POST") {
         return uctrl.login(req.get_body());
     }
-    return Response(404, {}, "'message': 'unknown route'");
+    return MessageResponse(404, "unknown route");
 }

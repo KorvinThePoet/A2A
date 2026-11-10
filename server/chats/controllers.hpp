@@ -5,6 +5,7 @@
 #include "exceptions.hpp"
 #include "../tools/strtools.hpp"
 #include "../requests/response.hpp"
+#include "../users/schemas.hpp"
 
 #include <iostream>
 #include <vector>
@@ -14,6 +15,8 @@ namespace Chats {
     class ChatController {
     private:
         Storage& storage;
+
+        bool check_auth(size_t user_id, const std::string& hashed_token);
     public:
         ChatController(Storage& storage) : storage(storage) {}
         Response create_chat(const std::string& body);
@@ -22,6 +25,8 @@ namespace Chats {
         Response add_user(const std::string& body);
         Response send_file(const std::string& body);
         Response change_user_role(const std::string& body);
+        Response get_chat(const std::string& body);
+        Response get_chat_from(const std::string& body);
 
         Response delete_chat(const std::string& body);
     };

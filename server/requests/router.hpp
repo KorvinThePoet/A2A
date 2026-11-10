@@ -36,7 +36,7 @@ public:
 
     Response route(const Request& req, Storage& storage) {
         if (req.is_bad_request()) {
-            return Response(400, {}, "'msg': 'bad request'");
+            return MessageResponse(400, "bad request");
         }
         std::string route = req.get_route();
 

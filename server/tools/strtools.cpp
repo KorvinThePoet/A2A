@@ -65,7 +65,7 @@ std::vector<std::string> garbage_split(const std::string& str, char sep) {
 }
 
 
-std::vector<std::string> devide_in_two(const std::string& str, int start, char sep) {
+std::vector<std::string> divide_in_two(const std::string& str, int start, char sep) {
 
     std::string prefix;
     std::string postfix;
