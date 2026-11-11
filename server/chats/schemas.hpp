@@ -5,35 +5,36 @@
 #include <optional>
 #include "../users/schemas.hpp"
 
+// надо буде каритку для чатков
 struct Chat{
-    size_t id;
+    int id;
     std::string title;
     bool is_group;
 };
 
 struct Message{
-    size_t id;
-    size_t chat_id;
-    size_t user_id;
+    int id;
+    int chat_id;
+    int user_id;
     std::string text;
     std::time_t created_at;
 };
 
 struct File{
-    size_t id;
+    int id;
     std::string file_name;
-    size_t size;
+    int size;
     std::string path;
 };
 
 struct MessageFile{
-    size_t message_id;
-    size_t file_id;
+    int message_id;
+    int file_id;
 };
 
 struct ChatMember{
-    size_t chat_id;
-    size_t user_id;
+    int chat_id;
+    int user_id;
     std::string role = "member";
     std::time_t joined_at;
     std::time_t last_online;

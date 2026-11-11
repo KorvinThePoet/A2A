@@ -6,7 +6,6 @@
 // ROUTES might be
 // /users/create_user/
 // /users/get_user/{user_id: int}/
-
 Response Users::route(const Request& req, Storage &storage) {
     std::string local_route = req.get_route();
     std::vector<std::string> prf_n_psf = divide_in_two(local_route, 1, '/');

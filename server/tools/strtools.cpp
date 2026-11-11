@@ -16,8 +16,8 @@ std::string tolower(const std::string& x){
     return res;
 }
 
-size_t string_to_size_t(const std::string& x){
-    size_t res = 0;
+int string_to_int(const std::string& x){
+    int res = 0;
     for (int i = 0; i < x.size(); ++i){
         if(x[i] < '0' || x[i] > '9') {
             return 0;
@@ -163,4 +163,15 @@ std::string hash_password(const std::string& password) {
 
 std::string hash_token(const std::string& token) {
     return "damn_that_token's hashed:" + token;
+}
+
+std::string map_to_string(const std::map<std::string, std::string>& inp) {
+    auto iter = inp.begin();
+    std::string result = "{'" + iter->first + "':'" + iter->second + "'";
+    ++iter;
+    for(; iter != inp.end(); ++iter) {
+        result += ",'" + iter->first + "':'" + iter->second + "'";
+    }
+    result += "}";
+    return result;
 }

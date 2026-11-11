@@ -1,5 +1,5 @@
 #include "response.hpp"
-
+using namespace Requests;
 
 std::string Response::to_string() {
     std::string result_str = "{'status': " + std::to_string(status);

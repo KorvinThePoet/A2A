@@ -18,7 +18,7 @@
 // а там уже server/users/router.cpp вызывает route и далее по кайфу выполняет задачку
 // и тдтдтдтдтдтд и тд(и так далее(и тд))
 
-using RouterFunk = std::function<Response(const Request&, Storage&)>;
+using RouterFunk = std::function<Requests::Response(const Requests::Request&, Storage&)>;
 
 namespace Requests {
 class RouterManager{

@@ -90,7 +90,7 @@ Response Users::UserController::get_personal_info(const std::string &body) {
     auto payload = to_map(body);
     std::string str_user_id = payload["user_id"];
     std::string str_token = payload["token"];
-    size_t user_id = string_to_size_t(str_user_id);
+    int user_id = string_to_int(str_user_id);
     if(str_user_id.empty() || str_token.empty() || user_id == 0) {
         return MessageResponse(400, "user id or token are not specified");
     }

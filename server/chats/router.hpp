@@ -6,5 +6,5 @@
 #include "controllers.hpp"
 
 namespace Chats {
-Response route(const Request& req, Storage& storage);
+Requests::Response route(const Requests::Request& req, Storage& storage);
 }

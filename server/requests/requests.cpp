@@ -4,6 +4,7 @@
 #include "requests.hpp"
 #include "../tools/strtools.hpp"
 
+using namespace Requests;
 Request::Request(const std::string& str) : method(0), route(""), host(""), content_type(""),
                                             content_length(0), bad_request(false){
     std::string met, rou, hst, tp, len, bd;
@@ -29,7 +30,7 @@ Request::Request(const std::string& str) : method(0), route(""), host(""), conte
         rou += str[i];
     }
     ++i;
-    size_t pos = toupper(str).find(toupper("Host: "), i);
+    int pos = toupper(str).find(toupper("Host: "), i);
     if (i != pos){
         bad_request = true;
         return;
@@ -39,7 +40,7 @@ Request::Request(const std::string& str) : method(0), route(""), host(""), conte
         hst += str[i];
     }
     ++i;
-    size_t pos_type = toupper(str).find(toupper("Content-type: "), i);
+    int pos_type = toupper(str).find(toupper("Content-type: "), i);
     if (i != pos_type){
         bad_request = true;
         return;
@@ -49,7 +50,7 @@ Request::Request(const std::string& str) : method(0), route(""), host(""), conte
         tp += str[i];
     }
     ++i;
-    size_t pos_len = toupper(str).find(toupper("Content-length: "), i);
+    int pos_len = toupper(str).find(toupper("Content-length: "), i);
     if (i != pos_len){
         bad_request = true;
         return;
@@ -58,7 +59,7 @@ Request::Request(const std::string& str) : method(0), route(""), host(""), conte
     for (; str[i] != '\n' && i < str.size(); ++i){
         len += str[i];
     }
-    content_length = string_to_size_t(len);
+    content_length = string_to_int(len);
     if(content_length == 0) {
         bad_request = true;
         return;
@@ -109,7 +110,7 @@ std::string Request::get_content_type() const {
 std::string Request::get_body() const {
     return body;
 }
-size_t Request::get_content_length() const {
+int Request::get_content_length() const {
     return content_length;
 }
 bool Request::is_bad_request() const{

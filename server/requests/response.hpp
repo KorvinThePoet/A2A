@@ -4,6 +4,7 @@
 #include <map>
 #include <iostream>
 
+namespace Requests {
 class Response{
 protected: 
     int status;
@@ -27,5 +28,7 @@ public:
         body = "{'message':'" + message + "'}";
         this->status = status;
     }
+    
 };
 
+}

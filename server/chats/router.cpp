@@ -1,9 +1,9 @@
 #include "router.hpp"
+// мда, зачем мы выбрали это т проект, щас бы уже шахматы доделали черти
 
-
-Response Chats::route(const Request& req, Storage& storage) {
+Requests::Response Chats::route(const Request& req, Storage& storage) {
     if (req.is_bad_request()) {
-        return MessageResponse(404, "Bad request");
+        return Requests::MessageResponse(404, "Bad request");
     }
 
     std::vector<std::string> divided_request = divide_in_two(req.get_route(), 1, '/');
@@ -11,10 +11,17 @@ Response Chats::route(const Request& req, Storage& storage) {
     std::string postfix = divided_request[1];
 
     if (prefix != "chats") {
-        return MessageResponse(404, "Wrong route method");
+        return Requests::MessageResponse(404, "Wrong route method");
     }
 
-    ChatController chat_ctrl(storage);
+    // бля может надо было сделать типа мап мапов типа
+    // routes["POST"]["create_chat"] = create_chat и передавать боди всегда
+    // а то я подумал, хотя зря наверное, ну ладно
+    // да, фигню сказанул
+     // о доп пробел, короче оставлю так, хотя нужна консультанция
+    // бял🥀
+
+    Chats::ChatController chat_ctrl(storage);
     if(starts_with(postfix, "create_chat") && req.get_method() == "POST") {
         return chat_ctrl.create_chat(req.get_body());
     }
@@ -43,5 +50,5 @@ Response Chats::route(const Request& req, Storage& storage) {
         return chat_ctrl.delete_message(req.get_body());
     }
 
-    return MessageResponse(404, "Unknown route");
+    return Requests::MessageResponse(404, "Unknown route");
 }
