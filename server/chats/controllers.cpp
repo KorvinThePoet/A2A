@@ -170,12 +170,12 @@ Requests::Response Chats::ChatController::add_user(const std::string& body) {
     auto json = to_map(body);
     Chats::AddUserRequest aur {json["user_id"], json["token"], json["new_user_id"], json["chat_id"]};
 
-    if(!aur.is_empty() || !check_auth(aur.user_id, aur.token)) {
+    if(aur.is_empty() || !check_auth(aur.user_id, aur.token)) {
         return Requests::MessageResponse(400, "Wrong årgument√");
     }
     
     try {
-        ChatMember new_user {aur.chat_id, aur.user_id, "member", std::time_t(std::time(nullptr)), std::time_t(std::time(nullptr))};
+        ChatMember new_user {aur.chat_id, aur.new_user_id, "member", std::time_t(std::time(nullptr)), std::time_t(std::time(nullptr))};
         auto members = storage.get_all<ChatMember>(
             sqlite_orm::where(
                 sqlite_orm::c(&ChatMember::user_id) == new_user.user_id
@@ -214,7 +214,7 @@ Requests::Response Chats::ChatController::change_user_role(const std::string& bo
     try {
         auto cur_user = storage.get_all<ChatMember>(
             sqlite_orm::where(
-                sqlite_orm::c(&ChatMember::chat_id) == string_to_int(json["chat_di"])
+                sqlite_orm::c(&ChatMember::chat_id) == string_to_int(json["chat_id"])
                 and sqlite_orm::c(&ChatMember::user_id) == aur.user_id
             )
         );
@@ -278,7 +278,7 @@ Requests::Response Chats::ChatController::get_users_chats(const std::string& bod
     try {
         auto members = storage.get_all<ChatMember>(
             sqlite_orm::where(
-                sqlite_orm::c(&ChatMember::chat_id) == string_to_int("chat_id")
+                sqlite_orm::c(&ChatMember::chat_id) == string_to_int(json["chat_id"])
             )
         );
 

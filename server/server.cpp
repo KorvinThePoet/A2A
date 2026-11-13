@@ -11,10 +11,13 @@
 #include <thread>
 #include <atomic>
 #include <mutex>
+#include <algorithm>
+
 #include "requests/requests.hpp"
 #include "requests/router.hpp"
 #include "db/storage.hpp"
 #include "users/router.hpp"
+#include "chats/router.hpp"
 
 
 class Server {
@@ -214,6 +217,7 @@ public:
 int main() {
     Requests::RouterManager mng;
     mng.register_router("/users/", Users::route);
+    mng.register_router("/chats/", Chats::route);
 
     Server server(8080, mng);
     

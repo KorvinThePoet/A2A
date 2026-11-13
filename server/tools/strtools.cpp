@@ -166,6 +166,9 @@ std::string hash_token(const std::string& token) {
 }
 
 std::string map_to_string(const std::map<std::string, std::string>& inp) {
+    if (inp.empty()) {
+        return "{}";
+    }
     auto iter = inp.begin();
     std::string result = "{'" + iter->first + "':'" + iter->second + "'";
     ++iter;

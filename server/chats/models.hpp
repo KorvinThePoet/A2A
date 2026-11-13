@@ -1,5 +1,8 @@
 #pragma once
 
+#include "../tools/strtools.hpp"
+
+
 namespace Chats {
 struct AuthenticatedUserRequest {
     virtual bool is_empty() const{

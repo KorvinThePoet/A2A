@@ -1,9 +1,8 @@
 #pragma once
 
+#include "../tools/strtools.hpp"
 #include "../db/storage.hpp"
 #include "models.hpp"
-#include "exceptions.hpp"
-#include "../tools/strtools.hpp"
 #include "../requests/response.hpp"
 #include "../users/schemas.hpp"
 

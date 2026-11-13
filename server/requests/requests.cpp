@@ -9,7 +9,7 @@ Request::Request(const std::string& str) : method(0), route(""), host(""), conte
                                             content_length(0), bad_request(false){
     std::string met, rou, hst, tp, len, bd;
     int i = 0;
-    for (; str[i] != ' '; ++i){
+    for (; str[i] != ' ' && i < str.length(); ++i){
         met += str[i];
     }
     if (toupper(met) == "POST"){

@@ -126,7 +126,7 @@ Response Users::UserController::get_all_users() {
     }
     std::string response = "{'0':" + UserResponse(users[0]).to_json()+"";
     for(int i = 1; i < users.size(); ++i) {
-        response += ",{'" + std::to_string(i) + "':" + UserResponse(users[i]).to_json();
+        response += ",'" + std::to_string(i) + "':" + UserResponse(users[i]).to_json();
     }
     response += "}";
     return Response(200, {}, response);
@@ -141,7 +141,7 @@ Response Users::UserController::login(const std::string& body) {
     }
 
     LoginUserRequest lur = *lur_opt;
-    auto users = storage.get_all<User>(sqlite_orm::where(sqlite_orm::c(&User::username)==lur.username));
+    auto users = storage.get_all<User>(sqlite_orm::where(sqlite_orm::c(&User::username)==tolower(lur.username)));
     if(users.empty()) {
         return MessageResponse(400, "No such user");
     }
@@ -153,7 +153,7 @@ Response Users::UserController::login(const std::string& body) {
         std::string str_token = user.username + std::to_string(std::time(nullptr));
         Token token {-1, hash_token(str_token), user.id, std::time(nullptr) + 20};
         storage.insert<Token>(token);
-        return Response(200, {}, "'token':'" + str_token + "'}");
+        return Response(200, {}, "{'token':'" + str_token + "'}");
     }
     return MessageResponse(400, "password is invalid");
 }

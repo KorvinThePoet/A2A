@@ -93,7 +93,7 @@ inline auto makeMessageFileTable(){
     using namespace sqlite_orm;
     return make_table("message_file",
         make_column("message_id", &MessageFile::message_id),
-        make_column("file_id", &File::id),
+        make_column("file_id", &MessageFile::file_id),
         primary_key(&MessageFile::message_id, &MessageFile::file_id),
         foreign_key(&MessageFile::message_id).references(&Message::id).on_delete.cascade(),
         foreign_key(&MessageFile::file_id).references(&File::id)
