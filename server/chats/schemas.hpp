@@ -6,6 +6,7 @@
 #include "../users/schemas.hpp"
 
 // надо буде каритку для чатков
+// какая еще калитка ты че
 struct Chat{
     int id;
     std::string title;

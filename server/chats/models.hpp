@@ -2,8 +2,16 @@
 
 namespace Chats {
 struct AuthenticatedUserRequest {
+    virtual bool is_empty() const{
+        return token.empty() || user_id == 0;
+    }
     std::string token;
-    std::string user_id;
+
+    int user_id;
+
+    AuthenticatedUserRequest(const std::string& token, const std::string& user_id) : token(token), user_id(string_to_int(user_id)) {}
+
+    virtual ~AuthenticatedUserRequest() = default;
 };
 
 struct FileResponse : File {
@@ -50,6 +58,37 @@ struct MessageResponse : Message{
     }
 };
 
+
+
+struct ChatMembersResponse {
+    int chat_id;
+    std::vector<ChatMember> members;
+
+    ChatMembersResponse(int chat_id, const std::vector<ChatMember>& mems) : members(mems) {
+
+    }
+
+    std::string to_json() {
+        std::map<std::string, std::string> res;
+        res["chat_id"] = std::to_string(chat_id);
+
+        std::map<std::string, std::string> members_map;
+        for(int i = 0; i < members.size(); ++i) {
+            std::map<std::string, std::string> cur_member;
+            cur_member["user_id"] = std::to_string(members[i].user_id);
+            cur_member["chat_id"] = std::to_string(members[i].chat_id);
+            cur_member["role"] = members[i].role;
+            cur_member["chat_id"] = std::to_string(members[i].chat_id);
+            cur_member["last_online"] = formatTime(members[i].last_online);
+            cur_member["joined_at"] = formatTime(members[i].joined_at);
+
+            members_map[std::to_string(members[i].user_id)] = map_to_string(cur_member);
+        }
+        res["members"] = map_to_string(members_map);
+        return map_to_string(res);
+    }
+};
+
 struct ChatResponse {
     std::vector<Message> messages;
 
@@ -60,6 +99,45 @@ struct ChatResponse {
             json_shi[std::to_string(i)] = Chats::MessageResponse(messages[i]).to_json();
         }
         return map_to_string(json_shi);
+    }
+};
+
+struct CreateChatRequest : public AuthenticatedUserRequest {
+    std::string title;
+    bool is_group;
+    bool bad_request;
+
+    CreateChatRequest(const std::string& user_id, const std::string& token, const std::string& title, const std::string& is_group)
+        : AuthenticatedUserRequest(token, user_id), title(title) {
+            bad_request = false;
+            if(tolower(is_group) == "true") {
+                this->is_group = false;
+                return;
+            }
+            if(tolower(is_group) == "false") {
+                this->is_group = false;
+                return;
+            }
+            bad_request = true;
+        }
+    
+    bool is_empty() const override {
+        return AuthenticatedUserRequest::is_empty() || bad_request || title.empty();
+    }
+};
+
+struct AddUserRequest : public AuthenticatedUserRequest {
+    int new_user_id;
+    int chat_id;
+
+    AddUserRequest(const std::string& user_id, const std::string& token, 
+        const std::string& new_user_id, const std::string& chat_id) : 
+                AuthenticatedUserRequest(token, user_id),
+                new_user_id(string_to_int(new_user_id)), 
+                chat_id(string_to_int(chat_id)) {}
+    
+    bool is_empty() const override{
+        return AuthenticatedUserRequest::is_empty() || new_user_id == 0 || chat_id == 0;
     }
 };
 }

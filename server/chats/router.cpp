@@ -1,7 +1,7 @@
 #include "router.hpp"
 // мда, зачем мы выбрали это т проект, щас бы уже шахматы доделали черти
 
-Requests::Response Chats::route(const Request& req, Storage& storage) {
+Requests::Response Chats::route(const Requests::Request& req, Storage& storage) {
     if (req.is_bad_request()) {
         return Requests::MessageResponse(404, "Bad request");
     }
@@ -11,7 +11,7 @@ Requests::Response Chats::route(const Request& req, Storage& storage) {
     std::string postfix = divided_request[1];
 
     if (prefix != "chats") {
-        return Requests::MessageResponse(404, "Wrong route method");
+        return Requests::MessageResponse(404, "Wrong route origin");
     }
 
     // бля может надо было сделать типа мап мапов типа
@@ -37,12 +37,14 @@ Requests::Response Chats::route(const Request& req, Storage& storage) {
     if(starts_with(postfix, "change_user_role") && req.get_method() == "POST") {
         return chat_ctrl.change_user_role(req.get_body());
     }
+
     if(starts_with(postfix, "get_chat_from") && req.get_method() == "GET") {
         return chat_ctrl.get_chat_from(req.get_body());
     }
     if(starts_with(postfix, "get_chat") && req.get_method() == "GET") {
         return chat_ctrl.get_chat(req.get_body());
     }
+
     if(starts_with(postfix, "delete_chat") && req.get_method() == "DELETE") {
         return chat_ctrl.delete_chat(req.get_body());
     }

@@ -9,10 +9,13 @@
 
 #include <iostream>
 #include <vector>
+#include <sstream>
+#include <iomanip>
+#include <ctime>
 
 namespace Chats {
 
-    class ChatController {
+class ChatController {
     private:
         Storage& storage;
 
@@ -21,13 +24,15 @@ namespace Chats {
         ChatController(Storage& storage) : storage(storage) {}
         Requests::Response create_chat(const std::string& body);
         Requests::Response create_message(const std::string& body);
-        Requests::Response delete_message(const std::string& body);
         Requests::Response add_user(const std::string& body);
         Requests::Response send_file(const std::string& body);
         Requests::Response change_user_role(const std::string& body);
+
         Requests::Response get_chat(const std::string& body);
         Requests::Response get_chat_from(const std::string& body);
+        Requests::Response get_users_chats(const std::string& body);
 
+        Requests::Response delete_message(const std::string& body);
         Requests::Response delete_chat(const std::string& body);
     };
 }

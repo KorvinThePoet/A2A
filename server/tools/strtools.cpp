@@ -175,3 +175,23 @@ std::string map_to_string(const std::map<std::string, std::string>& inp) {
     result += "}";
     return result;
 }
+
+
+bool empty_values_in_map(const std::map<std::string, std::string>& inp) {
+    auto iter = inp.begin();
+    for(; iter != inp.end(); ++iter) {
+        if (iter->second.empty()) {
+            return true;
+        }
+    }
+    return false;
+}
+
+std::string formatTime(std::time_t rawTime) {
+    std::tm* timeInfo = std::localtime(&rawTime);
+    
+    std::ostringstream oss;
+    oss << std::put_time(timeInfo, "%d.%m.%YT%H:%M%S");
+    
+    return oss.str();
+}
