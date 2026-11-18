@@ -29,7 +29,7 @@ class ChatController {
 
         Requests::Response get_chat(const std::string& body);
         Requests::Response get_chat_from(const std::string& body);
-        Requests::Response get_users_chats(const std::string& body);
+        Requests::Response get_users_chat(const std::string& body);
 
         Requests::Response delete_message(const std::string& body);
         Requests::Response delete_chat(const std::string& body);

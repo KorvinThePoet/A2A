@@ -92,8 +92,9 @@ Requests::Response Chats::ChatController::create_chat(const std::string& body) {
     try {
         Chat chat {-1, ccr.title, ccr.is_group};
         int new_chat_id = storage.insert(chat);
+
         ChatMember admin {new_chat_id, ccr.user_id, "admin", std::time_t(std::time(nullptr)), std::time_t(std::time(nullptr))};
-        storage.insert(admin);
+        storage.replace(admin);
     }catch(const std::runtime_error& e) {
         return Requests::MessageResponse(404, e.what());
     }
@@ -185,7 +186,7 @@ Requests::Response Chats::ChatController::add_user(const std::string& body) {
         if(!members.empty()) {
             return Requests::MessageResponse(400, "User already in chat");
         }
-        storage.insert(new_user);
+        storage.replace(new_user);
     } catch(const std::runtime_error& e) {
         return Requests::MessageResponse(400, e.what());
     }
@@ -264,7 +265,7 @@ Requests::Response Chats::ChatController::get_chat(const std::string& body) {
     return get_chat_from(new_body);
 }
 
-Requests::Response Chats::ChatController::get_users_chats(const std::string& body) {
+Requests::Response Chats::ChatController::get_users_chat(const std::string& body) {
     // body
     // user_id
     // token

@@ -50,6 +50,7 @@ Response Users::UserController::create_user(const std::string& body) {
         return MessageResponse(400, "Short password");
     }
     User new_user;
+    new_user.id = -1;
     new_user.username = tolower(cur.username);
     new_user.full_name = cur.full_name;
     new_user.email = cur.email;
@@ -124,11 +125,13 @@ Response Users::UserController::get_all_users() {
     if(users.empty()) {
         return Response(200, {}, "{}");
     }
-    std::string response = "{'0':" + UserResponse(users[0]).to_json()+"";
-    for(int i = 1; i < users.size(); ++i) {
-        response += ",'" + std::to_string(i) + "':" + UserResponse(users[i]).to_json();
+    std::string response;
+    std::map<std::string, std::string> json;
+    
+    for(int i = 0; i < users.size(); ++i) {
+        json[std::to_string(i)] = UserResponse(users[i]).to_json();
     }
-    response += "}";
+    response = map_to_string(json);
     return Response(200, {}, response);
 }
 
@@ -149,11 +152,11 @@ Response Users::UserController::login(const std::string& body) {
     if(user.hashed_password == hash_password(lur.password)) {
         storage.remove_all<Token>(sqlite_orm::where(sqlite_orm::c(&Token::user_id) == user.id));
 
-        // Добавить немного времени хранения, а то 20 секунд маловато для меня жиесь
+        // Добавить немного времени хранения, а то 100 секунд маловато для меня жиесь
         std::string str_token = user.username + std::to_string(std::time(nullptr));
-        Token token {-1, hash_token(str_token), user.id, std::time(nullptr) + 20};
+        Token token {-1, hash_token(str_token), user.id, std::time(nullptr) + 100};
         storage.insert<Token>(token);
-        return Response(200, {}, "{'token':'" + str_token + "'}");
+        return Response(200, {}, "{\"token\":\"" + str_token + "\"}");
     }
     return MessageResponse(400, "password is invalid");
 }

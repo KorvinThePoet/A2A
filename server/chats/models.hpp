@@ -45,7 +45,7 @@ struct MessageResponse : Message{
         json_shi["chat_id"] = std::to_string(this->chat_id);
         json_shi["user_id"] = std::to_string(this->user_id);
         // hz где экринрование проверияь а то вдруг буеде text = "Arthur's code is unsafe"
-        // типа в  json тогда получится {..., 'text': 'Arthur's code....}
+        // типа в  json тогда получится {..., "text": "Arthur's code....}
         // и типа плохо навперное ну это надао с асланом разговаривать
         json_shi["text"] = this->text;
         // сделать чтобы std::time_t в че то типа DD:MM:YY HH:MM:SS

@@ -101,7 +101,7 @@ bool starts_with(const std::string& dep, const std::string& arr) {
 
 std::map<std::string, std::string> to_map(const std::string& str) {
     // TODO дырявое ведро хихи
-    // ALLOWED ONLY single quotion mark ("'")
+    // ALLOWED ONLY double quotion mark ("\"")
 
     std::map<std::string, std::string> result;
     std::vector<std::string> pairs = split(str, ',');
@@ -112,14 +112,14 @@ std::map<std::string, std::string> to_map(const std::string& str) {
         int i = 0;
         bool seen = false;
         for(; i < pair.length(); ++i) {
-            if(pair[i] == '\'' && seen) {
+            if(pair[i] == '\"' && seen) {
                 ++i;
                 break;
             }
             if(seen) {
                 curr_key += pair[i];
             }
-            if(pair[i] == '\'') {
+            if(pair[i] == '\"') {
                 seen = true;
                 continue;
             }
@@ -136,13 +136,13 @@ std::map<std::string, std::string> to_map(const std::string& str) {
                     break;
                 }
             }
-            if(seen && pair[i] == '\'') {
+            if(seen && pair[i] == '\"') {
                 break;
             }
             if(seen) {
                 curr_val += pair[i];
             }
-            if(pair[i] == '\'') {
+            if(pair[i] == '\"') {
                 seen = true;
             }
         }
@@ -170,10 +170,10 @@ std::string map_to_string(const std::map<std::string, std::string>& inp) {
         return "{}";
     }
     auto iter = inp.begin();
-    std::string result = "{'" + iter->first + "':'" + iter->second + "'";
+    std::string result = "{\"" + iter->first + "\":\"" + iter->second + "\"";
     ++iter;
     for(; iter != inp.end(); ++iter) {
-        result += ",'" + iter->first + "':'" + iter->second + "'";
+        result += ",\"" + iter->first + "\":\"" + iter->second + "\"";
     }
     result += "}";
     return result;

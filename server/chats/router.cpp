@@ -44,6 +44,10 @@ Requests::Response Chats::route(const Requests::Request& req, Storage& storage) 
     if(starts_with(postfix, "get_chat") && req.get_method() == "GET") {
         return chat_ctrl.get_chat(req.get_body());
     }
+    if(starts_with(postfix, "get_users_chat") && req.get_method() == "GET") {
+        return chat_ctrl.get_users_chat(req.get_body());
+    }
+    
 
     if(starts_with(postfix, "delete_chat") && req.get_method() == "DELETE") {
         return chat_ctrl.delete_chat(req.get_body());

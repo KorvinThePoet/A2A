@@ -2,7 +2,9 @@
 // Эти объекты учавствуют при непосредственно запроссаъ и ответовх
 #pragma once
 #include <string>
+#include <map>
 #include "schemas.hpp"
+#include "../tools/strtools.hpp"
 
 namespace Users {
 struct CreateUserRequest{
@@ -31,25 +33,24 @@ struct UserResponse{
     std::string full_name;
     std::string pfp_path;
 
-    UserResponse(const User& u) : username(u.username), full_name(u.full_name.value_or("")), id(u.id), pfp_path(u.pfp_path) {}
+    std::map<std::string, std::string> json;
+
+    UserResponse(const User& u) : username(u.username), full_name(u.full_name.value_or("")), id(u.id), pfp_path(u.pfp_path) {
+        json["id"] = std::to_string(id);
+        json["username"] = username;
+        json["full_name"] = full_name;
+        json["pfp_path"] = pfp_path;
+    }
 
     std::string to_json() {
-        return "{'id':'" + std::to_string(id) + 
-                "','username':'" + username + "','full_name':'" + full_name + 
-                "','pfp_path':'" + pfp_path + "'}";
+        return map_to_string(json);
     }
 };
 
 struct DetailedUserResponse : public UserResponse {
     std::string email;
-    DetailedUserResponse(const User& u) : UserResponse(u), email(u.email) {}
-
-    std::string to_json() {
-        return "{'id':'" + std::to_string(id) + 
-                "','username':'" + username +
-                "','email':'" + email +
-                "','full_name':'" + full_name + 
-                "','pfp_path':'" + pfp_path + "'}";
+    DetailedUserResponse(const User& u) : UserResponse(u), email(u.email) {
+        json["email"] = email;
     }
 };
 

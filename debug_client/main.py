@@ -7,6 +7,9 @@ from widgets import MainWindow
 
 def readyread(socket: QTcpSocket, window: MainWindow):
     data = socket.readAll().data().decode("utf-8")
+    print("GOT FROM SERVER")
+    print(data)
+    print()
     window.set_response(data)
     window.show()
 
