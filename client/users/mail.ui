@@ -59,7 +59,7 @@
         <item>
          <widget class="QPushButton" name="login_btn">
           <property name="text">
-           <string>Войти</string>
+           <string>Авторизоваться</string>
           </property>
          </widget>
         </item>
