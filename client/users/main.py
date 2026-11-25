@@ -4,6 +4,14 @@ from PyQt6.QtWidgets import QApplication, QMainWindow, QWidget
 from PyQt6 import uic
 from PyQt6.QtCore import Qt
 
+# // все в одном файле прям как мы любим
+# можно было бы раскидать все кроме MainWindow в файл типа widgets.py
+# че, а че MainWindow наследуется от QWidget а не от QMainWindow хмммм ....
+# понятно нафик
+# а че картинки в этой же директории, создай че то типа static/app/pics ну или че то другое но не 
+# на одном уровне с main.py
+# балямба, еще можно было бы *.ui файлы тоже выкинут в отдельный папка, а то странно выгледет
+# ну это я делать не будет, аслан, сделай пж ну ил артур 
 
 class MainWindow(QWidget):
     def __init__(self):
