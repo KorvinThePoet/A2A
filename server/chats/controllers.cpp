@@ -31,7 +31,7 @@ Requests::Response Chats::ChatController::get_chat_from(const std::string& body)
     Chats::AuthenticatedUserRequest req = {data["token"], data["user_id"]};
 
     if(req.is_empty() || !check_auth(req.user_id, req.token)) {
-        return Requests::MessageResponse(404, "ur no t uthenticcc(");
+        return Requests::MessageResponse(403, "ur no t uthenticcc(");
     }
     
     // user_id chat_id
@@ -43,7 +43,7 @@ Requests::Response Chats::ChatController::get_chat_from(const std::string& body)
     ));
 
     if (db_out.empty()) {
-        return Requests::MessageResponse(404, "U dont hav akces");
+        return Requests::MessageResponse(403, "U dont hav akces");
     }
     ChatMember mem = db_out[0];
 
@@ -52,7 +52,7 @@ Requests::Response Chats::ChatController::get_chat_from(const std::string& body)
     std::istringstream ss(data["time"]);
     ss >> std::get_time(&tm, "%d.%m.%YT%H:%M:%S");
     if (ss.fail()) {
-        return Requests::MessageResponse(400, "Wrong time че то там");
+        return Requests::MessageResponse(400, "Wrong time че то там format же");
     }
     tm.tm_isdst = -1;
     std::time_t time_from = std::mktime(&tm);
@@ -150,7 +150,7 @@ Requests::Response Chats::ChatController::delete_message(const std::string& body
         )
     );
     if (messages.empty()) {
-        return Requests::MessageResponse(400, "No messages found");
+        return Requests::MessageResponse(404, "No messages found");
     }
     try {
         Message message = messages[0];
@@ -234,7 +234,7 @@ Requests::Response Chats::ChatController::change_user_role(const std::string& bo
         }
         auto member = target_members[0];
         if(member.role == json["role"]) {
-            return Requests::MessageResponse(200, "WTF");
+            return Requests::MessageResponse(200, "Already changes wtf bro");
         }
         if(json["role"] == "admin") {
             member.role = "admin";
@@ -242,7 +242,7 @@ Requests::Response Chats::ChatController::change_user_role(const std::string& bo
         if(json["role"] == "member") {
             member.role = "member";
         } else {
-            return Requests::MessageResponse(400, "Dont know dis rol");
+            return Requests::MessageResponse(404, "Dont know dis rol");
         }
         storage.update(target_members[0]);
 
@@ -274,7 +274,7 @@ Requests::Response Chats::ChatController::get_users_chat(const std::string& body
 
     AuthenticatedUserRequest aur {json["token"], json["user_id"]};
     if(aur.is_empty() || json["chat_id"].empty() || !check_auth(aur.user_id, aur.token)) {
-        return Requests::MessageResponse(302, "FUck u");
+        return Requests::MessageResponse(400, "FUck u");
     }
     try {
         auto members = storage.get_all<ChatMember>(
@@ -284,7 +284,7 @@ Requests::Response Chats::ChatController::get_users_chat(const std::string& body
         );
 
         if(members.empty()) {
-            return Requests::MessageResponse(3033, "FF");
+            return Requests::MessageResponse(400, "FF");
         }
         bool in_chat = false;
         for (auto member : members) {
@@ -294,7 +294,7 @@ Requests::Response Chats::ChatController::get_users_chat(const std::string& body
             }
         }
         if(!in_chat) {
-            return Requests::MessageResponse(812, "paris");
+            return Requests::MessageResponse(403, "U are not fkn member get the fuck out bruh");
         }
         return Requests::Response(67, {}, ChatMembersResponse(members[0].chat_id, members).to_json());
     }catch(const std::runtime_error& e){
@@ -314,7 +314,7 @@ Requests::Response Chats::ChatController::delete_chat(const std::string& body) {
 
     AuthenticatedUserRequest aur {json["token"], json["user_id"]};
     if(aur.is_empty() || json["chat_id"].empty()) {
-        return Requests::MessageResponse(302, "FUck u");
+        return Requests::MessageResponse(400, "FUck u");
     }
     try{
         auto memberr = storage.get_all<ChatMember>(
@@ -331,7 +331,7 @@ Requests::Response Chats::ChatController::delete_chat(const std::string& body) {
     } catch(const std::runtime_error& e) {
         return Requests::MessageResponse(404, e.what());
     } catch(...) {
-        return Requests::MessageResponse(403, "я закончил это дермо");
+        return Requests::MessageResponse(400, "я закончил это дермо");
     }
     return Requests::MessageResponse(200, "УРАА");
 }

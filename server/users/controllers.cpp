@@ -98,7 +98,7 @@ Response Users::UserController::get_personal_info(const std::string &body) {
 
     auto tokens = storage.get_all<Token>(sqlite_orm::where(sqlite_orm::c(&Token::user_id) == user_id));
     if(tokens.empty()) {
-        return MessageResponse(400, "You have no access");
+        return MessageResponse(403, "You have no access");
     }
     auto token = *tokens.begin();
     
@@ -106,7 +106,7 @@ Response Users::UserController::get_personal_info(const std::string &body) {
         return MessageResponse(400, "your session is over, relogin");
     }
     if(hash_token(str_token) != token.hashed_token) {
-        return MessageResponse(400, "Access denied");
+        return MessageResponse(403, "Access denied");
     }
 
     try {
@@ -146,7 +146,7 @@ Response Users::UserController::login(const std::string& body) {
     LoginUserRequest lur = *lur_opt;
     auto users = storage.get_all<User>(sqlite_orm::where(sqlite_orm::c(&User::username)==tolower(lur.username)));
     if(users.empty()) {
-        return MessageResponse(400, "No such user");
+        return MessageResponse(404, "No such user");
     }
     User user = *users.begin();
     if(user.hashed_password == hash_password(lur.password)) {
