@@ -14,35 +14,67 @@
    <string>Form</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">QWidget#createChatCard {
-    background-color: white;
-    border-radius: 8px;
+   <string notr="true">/* Фон и закругление самой карточки */
+QWidget#createChatCard {
+    background-color: #ffffff;
+    border-radius: 10px;
 }
+
+/* Поле ввода поиска пользователя */
+QWidget#createChatCard QLineEdit {
+    background-color: #f8f9fa;
+    color: #000000;
+    border: 1px solid #cfd8dc;
+    border-radius: 6px;
+    padding: 5px 10px;
+}
+QWidget#createChatCard QLineEdit:focus {
+    border: 1px solid #64b5f6;
+    background-color: #ffffff;
+}
+
+/* Область прокрутки результатов поиска */
+QWidget#createChatCard QScrollArea {
+    background-color: #f8f9fa;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+}
+QWidget#createChatCard QScrollArea &gt; QWidget &gt; QWidget {
+    background-color: transparent;
+}
+
+/* Обычные кнопки (включая search_btn) */
 QWidget#createChatCard QPushButton {
     background-color: #f0f0f0;
-    color: black;
+    color: #000000;
     border: 1px solid #cccccc;
-    padding: 6px 12px;
-    border-radius: 4px;
+    padding: 6px 14px;
+    border-radius: 6px;
 }
 QWidget#createChatCard QPushButton:hover {
     background-color: #e0e0e0;
 }
-QWidget#createChatCard QLineEdit,
-QWidget#createChatCard QListWidget {
-    background-color: white;
-    color: black;
-    border: 1px solid #cccccc;
-    border-radius: 4px;
+
+/* Акцентная голубая кнопка Create */
+QWidget#createChatCard QPushButton#create_btn {
+    background-color: #90caf9;
+    color: #0d47a1;
+    border: 1px solid #64b5f6;
+    font-weight: bold;
 }
-QWidget#createChatCard QScrollArea {
-    background-color: white;
-    border: 1px solid #cccccc;
-    border-radius: 4px;
+QWidget#createChatCard QPushButton#create_btn:hover {
+    background-color: #64b5f6;
 }
 
-QWidget#createChatCard QScrollArea &gt; QWidget &gt; QWidget {
-    background-color: white;
+/* Аккуратная кнопка закрытия (крестик) */
+QWidget#createChatCard QPushButton#close_btn {
+    background-color: transparent;
+    border: none;
+    border-radius: 4px;
+    padding: 4px;
+}
+QWidget#createChatCard QPushButton#close_btn:hover {
+    background-color: #ffebee;
 }
 </string>
   </property>
@@ -107,7 +139,7 @@ QWidget#createChatCard QScrollArea &gt; QWidget &gt; QWidget {
             <x>0</x>
             <y>0</y>
             <width>470</width>
-            <height>166</height>
+            <height>172</height>
            </rect>
           </property>
          </widget>

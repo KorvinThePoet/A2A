@@ -30,12 +30,26 @@ class MainWindow(QWidget):
         self.create_group_popup = QWidget(self.overlay)
         uic.loadUi(create_group_path, self.create_group_popup)
         self.create_group_popup.setAttribute(Qt.WidgetAttribute.WA_StyledBackground, True)
+        
+        group_settings_path = os.path.join(os.path.dirname(__file__), "ui_files/GroupSettings.ui")
+        self.group_settings_popup = QWidget(self.overlay)
+        uic.loadUi(group_settings_path, self.group_settings_popup)
+        self.group_settings_popup.setAttribute(Qt.WidgetAttribute.WA_StyledBackground, True)
+
+        settings_path = os.path.join(os.path.dirname(__file__), "ui_files/Settings.ui")
+        self.settings_popup = QWidget(self, Qt.WindowType.Popup | Qt.WindowType.FramelessWindowHint)
+        uic.loadUi(settings_path, self.settings_popup)
+        self.settings_popup.setAttribute(Qt.WidgetAttribute.WA_StyledBackground, True)
+
 
         # Привязываем кнопки
+        self.settings_btn.clicked.connect(self.open_settings_popup)
         self.createChat.clicked.connect(self.open_chat_or_group)
         self.popup.close_btn.clicked.connect(self.close_all_popups)
         self.popup.newChat_btn.clicked.connect(self.open_create_chat)
         self.popup.newGroup_btn.clicked.connect(self.open_create_group)
+        self.create_group_popup.createGroup_btn.clicked.connect(self.open_group_settings)
+        self.group_settings_popup.close_btn.clicked.connect(self.close_all_popups)
         self.create_group_popup.close_btn.clicked.connect(self.close_all_popups)
         self.create_chat_popup.close_btn.clicked.connect(self.close_all_popups)
         self.create_chat_popup.create_btn.clicked.connect(self.add_new_chat)
@@ -98,6 +112,7 @@ class MainWindow(QWidget):
         self.popup.hide()
         self.create_chat_popup.hide()
         self.create_group_popup.hide()
+        self.group_settings_popup.hide()
 
         self.overlay.setGeometry(0, 0, self.width(), self.height())
         target_widget.adjustSize()
@@ -120,18 +135,29 @@ class MainWindow(QWidget):
     def open_create_group(self):
         self.show_centered_popup(self.create_group_popup)
 
+    def open_group_settings(self):
+        self.show_centered_popup(self.group_settings_popup)
+
     def close_all_popups(self):
         self.popup.hide()
         self.create_chat_popup.hide()
         self.create_group_popup.hide()
+        self.group_settings_popup.hide()
         self.overlay.hide()
 
     def resizeEvent(self, event):
         super().resizeEvent(event)
         if hasattr(self, 'overlay') and self.overlay.isVisible():
             self.overlay.setGeometry(0, 0, self.width(), self.height())
-            for widget in (self.popup, self.create_chat_popup, self.create_group_popup):
+            for widget in (self.popup, self.create_chat_popup, self.create_group_popup, self.group_settings_popup):
                 if widget.isVisible():
                     x = (self.overlay.width() - widget.width()) // 2
                     y = (self.overlay.height() - widget.height()) // 2
                     widget.move(x, y)
+
+    def open_settings_popup(self):
+        self.settings_popup.adjustSize()
+        pos = self.settings_btn.mapToGlobal(self.settings_btn.rect().bottomLeft())
+        self.settings_popup.move(pos.x(), pos.y() + 5)
+        self.settings_popup.show()
+

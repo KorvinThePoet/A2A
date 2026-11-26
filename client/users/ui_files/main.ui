@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Form</class>
- <widget class="QWidget" name="Form">
+ <class>mainCard</class>
+ <widget class="QWidget" name="mainCard">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -14,9 +14,85 @@
    <string>Form</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">QWidget#Form {
+   <string notr="true">/* Мягкий светлый градиент всего главного окна */
+QWidget#mainCard {
     background: qlineargradient(x1:0, y1:0, x2:1, y2:1, 
                 stop:0 #f5f7fa, stop:1 #e4ebf5);
+}
+
+/* Текстовые заголовки (название приложения A2A и имя активного чата) */
+QWidget#mainCard QLabel {
+    background-color: transparent;
+    color: #1a237e;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+/* Левая панель со списком чатов (выделяем чистым белым цветом) */
+QWidget#mainCard QScrollArea#chats {
+    background-color: #ffffff;
+    border: 1px solid #dbe4f0;
+    border-radius: 10px;
+}
+QWidget#mainCard QScrollArea#chats &gt; QWidget &gt; QWidget {
+    background-color: transparent;
+}
+
+/* Правая панель переписки (прозрачная или слегка светлая с аккуратной рамкой) */
+QWidget#mainCard QScrollArea#chat_now {
+    background-color: rgba(255, 255, 255, 0.65);
+    border: 1px solid #dbe4f0;
+    border-radius: 10px;
+}
+QWidget#mainCard QScrollArea#chat_now &gt; QWidget &gt; QWidget {
+    background-color: transparent;
+}
+
+/* Поле ввода сообщения */
+QWidget#mainCard QLineEdit {
+    background-color: #ffffff;
+    color: #212121;
+    border: 1px solid #cfd8dc;
+    border-radius: 16px;
+    padding: 8px 14px;
+    font-size: 13px;
+}
+QWidget#mainCard QLineEdit:focus {
+    border: 1px solid #64b5f6;
+}
+
+/* Все кнопки в главном окне (+, поиск, настройки, отправка) */
+QWidget#mainCard QPushButton {
+    background-color: #ffffff;
+    border: 1px solid #dbe4f0;
+    border-radius: 8px;
+    padding: 6px;
+}
+QWidget#mainCard QPushButton:hover {
+    background-color: #e3f2fd;
+    border: 1px solid #90caf9;
+}
+QWidget#mainCard QPushButton:pressed {
+    background-color: #bbdefb;
+}
+
+/* Аккуратный тонкий скроллбар для списков */
+QScrollBar:vertical {
+    border: none;
+    background: transparent;
+    width: 6px;
+    margin: 4px 0 4px 0;
+}
+QScrollBar::handle:vertical {
+    background: #cfd8dc;
+    border-radius: 3px;
+    min-height: 20px;
+}
+QScrollBar::handle:vertical:hover {
+    background: #90a4ae;
+}
+QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
+    height: 0px;
 }
 </string>
   </property>
@@ -97,7 +173,7 @@
         </spacer>
        </item>
        <item>
-        <widget class="QPushButton" name="settings">
+        <widget class="QPushButton" name="settings_btn">
          <property name="text">
           <string/>
          </property>
@@ -127,8 +203,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>195</width>
-            <height>405</height>
+            <width>197</width>
+            <height>403</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_4">
@@ -168,8 +244,8 @@
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>392</width>
-              <height>347</height>
+              <width>394</width>
+              <height>330</height>
              </rect>
             </property>
             <layout class="QVBoxLayout" name="verticalLayout_5">

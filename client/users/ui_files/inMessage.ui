@@ -20,10 +20,21 @@
    <string>Form</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">background-color: #f5f5f5;
-color: black;
-border: 1px solid #d0d0d0;
-border-radius: 6px;
+   <string notr="true">/* Пузырь входящего сообщения */
+QWidget#inMessage {
+    background-color: #f0f2f5;
+    border: 1px solid #dcdfe6;
+    border-radius: 12px;
+    border-bottom-left-radius: 2px;
+}
+
+/* Текст внутри сообщения */
+QWidget#inMessage QLabel {
+    background-color: transparent;
+    color: #212121;
+    font-size: 13px;
+    padding: 6px 10px;
+}
 </string>
   </property>
  </widget>

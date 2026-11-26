@@ -14,22 +14,43 @@
    <string>Form</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">QWidget#popupCard {
-    background-color: white;
-    border-radius: 8px;
+   <string notr="true">/* Фон и закругление самой карточки */
+QWidget#popupCard {
+    background-color: #ffffff;
+    border-radius: 10px;
 }
+
+/* Основные кнопки выбора (new chat, new group) */
 QWidget#popupCard QPushButton {
-    background-color: #f0f0f0;
-    color: black;
-    border: 1px solid #cccccc;
-    padding: 6px 12px;
-    border-radius: 4px;
+    background-color: #f8f9fa;
+    color: #212121;
+    border: 1px solid #cfd8dc;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: bold;
 }
+
 QWidget#popupCard QPushButton:hover {
-    background-color: #e0e0e0;
+    background-color: #e3f2fd;
+    border: 1px solid #64b5f6;
+    color: #0d47a1;
 }
+
 QWidget#popupCard QPushButton:pressed {
-    background-color: #d0d0d0;
+    background-color: #bbdefb;
+}
+
+/* Аккуратная кнопка закрытия (крестик) */
+QWidget#popupCard QPushButton#close_btn {
+    background-color: transparent;
+    border: none;
+    border-radius: 4px;
+    padding: 4px;
+}
+
+QWidget#popupCard QPushButton#close_btn:hover {
+    background-color: #ffebee;
 }
 </string>
   </property>

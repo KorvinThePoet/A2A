@@ -10,8 +10,87 @@
     <height>300</height>
    </rect>
   </property>
+  <property name="maximumSize">
+   <size>
+    <width>16777215</width>
+    <height>16777215</height>
+   </size>
+  </property>
   <property name="windowTitle">
    <string>Form</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">/* Фон и закругление самой карточки */
+QWidget#GroupSettings {
+    background-color: #ffffff;
+    border-radius: 10px;
+}
+
+/* Текстовые надписи (Name, Admin) */
+QWidget#GroupSettings QLabel {
+    background-color: transparent;
+    color: #212121;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+/* Поле ввода названия группы */
+QWidget#GroupSettings QLineEdit {
+    background-color: #f8f9fa;
+    color: #000000;
+    border: 1px solid #cfd8dc;
+    border-radius: 6px;
+    padding: 5px 10px;
+}
+QWidget#GroupSettings QLineEdit:focus {
+    border: 1px solid #64b5f6;
+    background-color: #ffffff;
+}
+
+/* Область прокрутки участников (чтобы не была темной от оверлея) */
+QWidget#GroupSettings QScrollArea {
+    background-color: #f8f9fa;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+}
+QWidget#GroupSettings QScrollArea &gt; QWidget &gt; QWidget {
+    background-color: transparent;
+}
+
+/* Обычные кнопки внутри окна */
+QWidget#GroupSettings QPushButton {
+    background-color: #f0f0f0;
+    color: #000000;
+    border: 1px solid #cccccc;
+    padding: 6px 14px;
+    border-radius: 6px;
+}
+QWidget#GroupSettings QPushButton:hover {
+    background-color: #e0e0e0;
+}
+
+/* Акцентная голубая кнопка Create */
+QWidget#GroupSettings QPushButton#create_btn {
+    background-color: #90caf9;
+    color: #0d47a1;
+    border: 1px solid #64b5f6;
+    font-weight: bold;
+}
+QWidget#GroupSettings QPushButton#create_btn:hover {
+    background-color: #64b5f6;
+}
+
+/* Аккуратная кнопка закрытия (крестик) */
+QWidget#GroupSettings QPushButton#close_btn {
+    background-color: transparent;
+    border: none;
+    border-radius: 4px;
+    padding: 4px;
+}
+QWidget#GroupSettings QPushButton#close_btn:hover {
+    background-color: #ffebee;
+}
+</string>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout_3">
    <item>
@@ -90,8 +169,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>374</width>
-            <height>130</height>
+            <width>376</width>
+            <height>125</height>
            </rect>
           </property>
          </widget>

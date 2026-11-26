@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Settings</class>
+ <widget class="QWidget" name="Settings">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>172</width>
+    <height>149</height>
+   </rect>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>16777215</width>
+    <height>16777215</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">/* Фон и тонкая рамка выпадающего меню */
+QWidget#Settings {
+    background-color: #ffffff;
+    border: 1px solid #cfd8dc;
+    border-radius: 10px;
+}
+
+/* Имя пользователя (User) */
+QWidget#Settings QLabel {
+    background-color: transparent;
+    color: #212121;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+/* Обычные кнопки (Change the username) */
+QWidget#Settings QPushButton {
+    background-color: #f8f9fa;
+    color: #212121;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 12px;
+}
+
+QWidget#Settings QPushButton:hover {
+    background-color: #e3f2fd;
+    border: 1px solid #64b5f6;
+    color: #0d47a1;
+}
+
+/* Если задашь кнопке Exit objectName = &quot;exit_btn&quot;, она станет аккуратной красной при наведении: */
+QWidget#Settings QPushButton#exit_btn {
+    color: #d32f2f;
+}
+
+QWidget#Settings QPushButton#exit_btn:hover {
+    background-color: #ffebee;
+    border: 1px solid #ef9a9a;
+}
+</string>
+  </property>
+  <layout class="QHBoxLayout" name="horizontalLayout_2">
+   <item>
+    <layout class="QVBoxLayout" name="verticalLayout" stretch="10,0,10,10">
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout" stretch="1,3">
+       <item>
+        <widget class="QLabel" name="photo">
+         <property name="maximumSize">
+          <size>
+           <width>40</width>
+           <height>40</height>
+          </size>
+         </property>
+         <property name="pixmap">
+          <pixmap>../photo/user.jpg</pixmap>
+         </property>
+         <property name="scaledContents">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>User</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <spacer name="verticalSpacer">
+       <property name="orientation">
+        <enum>Qt::Orientation::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>22</width>
+         <height>21</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="changeusername_btn">
+       <property name="text">
+        <string>Change the username</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="exit_btn">
+       <property name="text">
+        <string>Exit</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
