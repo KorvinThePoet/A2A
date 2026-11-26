@@ -59,7 +59,7 @@ QWidget#chatCard QLabel {
         <string/>
        </property>
        <property name="pixmap">
-        <pixmap>user.jpg</pixmap>
+        <pixmap>../photo/user.jpg</pixmap>
        </property>
        <property name="scaledContents">
         <bool>true</bool>

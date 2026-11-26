@@ -1,0 +1,42 @@
+Сделать тк чтобы в выводе списка чатов
+было хранения списка list[Chat]
+и настрой вывод нормально чтобы
+
+Потом сделай модель для сообщений и подумай че там еще можно
+в чате тоже должны быть сообщения
+как ты видишь в Chat есть поле chat_id
+в кэше по ключу chat_id должны получать список сообщений
+и загружать из сервака тоже, эти сообщения все в json
+из  json  в Message ну или весь json в Chat
+пример json
+{
+    "chat_id": 1,
+    "title": "Arthur",
+    "users":[
+        {
+            "id": 1,
+            "username": "Arthur"
+        },
+        {
+            "id": 2,
+            "username": "Aslanbek"
+        }
+    ],
+    "messages":[
+        {
+            "id": 1,
+            "sender_id": 2,
+            "reciever_id": 1,
+            "content": "Hello mathafaka"
+        },
+        {
+            "id": 2,
+            "sender_id": 1,
+            "reciever_id": 2,
+            "content": "sap, kto tut debil"
+        }
+    ]
+
+}
+
+это превратить как надо\

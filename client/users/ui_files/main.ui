@@ -34,7 +34,7 @@
            </property>
            <property name="icon">
             <iconset>
-             <normaloff>plus-math.jpg</normaloff>plus-math.jpg</iconset>
+             <normaloff>../photo/plus-math.jpg</normaloff>../photo/plus-math.jpg</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -51,7 +51,7 @@
            </property>
            <property name="icon">
             <iconset>
-             <normaloff>лупа.jpg</normaloff>лупа.jpg</iconset>
+             <normaloff>../photo/лупа.jpg</normaloff>../photo/лупа.jpg</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -103,7 +103,7 @@
          </property>
          <property name="icon">
           <iconset>
-           <normaloff>настройки.png</normaloff>настройки.png</iconset>
+           <normaloff>../photo/настройки.png</normaloff>../photo/настройки.png</iconset>
          </property>
          <property name="iconSize">
           <size>
@@ -205,7 +205,7 @@
              </property>
              <property name="icon">
               <iconset>
-               <normaloff>sent.jpg</normaloff>sent.jpg</iconset>
+               <normaloff>../photo/sent.jpg</normaloff>../photo/sent.jpg</iconset>
              </property>
             </widget>
            </item>

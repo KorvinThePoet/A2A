@@ -74,7 +74,7 @@ QWidget#createChatCard QScrollArea &gt; QWidget &gt; QWidget {
          </property>
          <property name="icon">
           <iconset>
-           <normaloff>крест.jpg</normaloff>крест.jpg</iconset>
+           <normaloff>../photo/крест.jpg</normaloff>../photo/крест.jpg</iconset>
          </property>
         </widget>
        </item>
