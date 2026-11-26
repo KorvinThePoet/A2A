@@ -121,7 +121,7 @@ QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="serch">
+          <widget class="QPushButton" name="search_btn">
            <property name="text">
             <string/>
            </property>
@@ -209,6 +209,19 @@ QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_4">
            <item>
+            <widget class="QLineEdit" name="chat_search_input">
+             <property name="dragEnabled">
+              <bool>false</bool>
+             </property>
+             <property name="placeholderText">
+              <string>Search chats...</string>
+             </property>
+             <property name="clearButtonEnabled">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
             <spacer name="verticalSpacer">
              <property name="orientation">
               <enum>Qt::Orientation::Vertical</enum>
@@ -272,7 +285,17 @@ QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
          <item>
           <layout class="QHBoxLayout" name="horizontalLayout" stretch="10,1">
            <item>
-            <widget class="QLineEdit" name="message"/>
+            <widget class="QLineEdit" name="message">
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="placeholderText">
+              <string>Message...</string>
+             </property>
+            </widget>
            </item>
            <item>
             <widget class="QPushButton" name="run">

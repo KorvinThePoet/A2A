@@ -40,6 +40,10 @@ class MainWindow(QWidget):
         self.settings_popup = QWidget(self, Qt.WindowType.Popup | Qt.WindowType.FramelessWindowHint)
         uic.loadUi(settings_path, self.settings_popup)
         self.settings_popup.setAttribute(Qt.WidgetAttribute.WA_StyledBackground, True)
+        
+        self.chat_search_input.hide()
+        self.search_btn.clicked.connect(self.toggle_chat_search)
+        self.chat_search_input.textChanged.connect(self.filter_chats)
 
 
         # Привязываем кнопки
@@ -161,3 +165,23 @@ class MainWindow(QWidget):
         self.settings_popup.move(pos.x(), pos.y() + 5)
         self.settings_popup.show()
 
+    def toggle_chat_search(self):
+        if self.chat_search_input.isVisible():
+            self.chat_search_input.clear()
+            self.chat_search_input.hide()
+        else:
+            self.chat_search_input.show()
+            self.chat_search_input.setFocus()
+
+    def filter_chats(self, text):
+        search_text = text.strip().lower()
+        scroll_layout = self.chats.widget().layout()
+
+        if scroll_layout is None:
+            return
+
+        for i in range(scroll_layout.count()):
+            widget = scroll_layout.itemAt(i).widget()
+            if widget is not None and hasattr(widget, 'name_label'):
+                chat_name = widget.name_label.text().lower()
+                widget.setVisible(search_text in chat_name)
