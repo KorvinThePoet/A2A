@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Form</class>
- <widget class="QWidget" name="Form">
+ <class>mailCard</class>
+ <widget class="QWidget" name="mailCard">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -12,6 +12,86 @@
   </property>
   <property name="windowTitle">
    <string>Form</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">/* Мягкий светлый градиент всего окна */
+QWidget#mailCard {
+    background: qlineargradient(x1:0, y1:0, x2:1, y2:1, 
+                stop:0 #f5f7fa, stop:1 #e4ebf5);
+}
+
+/* Белая карточка формы (QGroupBox) */
+QWidget#mailCard QGroupBox {
+    background-color: #ffffff;
+    border: 1px solid #dbe4f0;
+    border-radius: 12px;
+    margin-top: 22px;
+    padding: 16px;
+    font-size: 15px;
+    font-weight: bold;
+    color: #1a237e;
+}
+
+/* Заголовок &quot;Восстановление&quot; */
+QWidget#mailCard QGroupBox::title {
+    subcontrol-origin: margin;
+    subcontrol-position: top left;
+    left: 12px;
+    padding: 0 6px;
+    color: #1a237e;
+}
+
+/* Подпись поля (Почта) */
+QWidget#mailCard QLabel {
+    background-color: transparent;
+    color: #37474f;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+/* Поле ввода почты */
+QWidget#mailCard QLineEdit {
+    background-color: #f8f9fa;
+    color: #212121;
+    border: 1px solid #cfd8dc;
+    border-radius: 6px;
+    padding: 6px 10px;
+    font-size: 13px;
+}
+
+QWidget#mailCard QLineEdit:focus {
+    border: 1px solid #64b5f6;
+    background-color: #ffffff;
+}
+
+/* Второстепенная кнопка (&quot;Авторизоваться&quot;) */
+QWidget#mailCard QPushButton {
+    background-color: #f8f9fa;
+    color: #212121;
+    border: 1px solid #cfd8dc;
+    border-radius: 6px;
+    padding: 7px 14px;
+    font-size: 13px;
+}
+
+QWidget#mailCard QPushButton:hover {
+    background-color: #e3f2fd;
+    border: 1px solid #90caf9;
+    color: #0d47a1;
+}
+
+/* Главная голубая кнопка действия (&quot;Отправить код&quot;) */
+QWidget#mailCard QPushButton#pass_btn {
+    background-color: #90caf9;
+    color: #0d47a1;
+    border: 1px solid #64b5f6;
+    font-weight: bold;
+}
+
+QWidget#mailCard QPushButton#pass_btn:hover {
+    background-color: #64b5f6;
+}
+</string>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
    <item>
