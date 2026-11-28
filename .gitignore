@@ -1,0 +1,12 @@
+
+.vscode/*
+**/__pycache__
+vcpkg
+*.out
+*.a
+*.db
+temp.cpp
+*.sh
+temp.py
+log.txt
+*.DS_Store
